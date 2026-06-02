@@ -56,7 +56,7 @@ class SessionManager:
         device_info = cls._parse_device(user_agent)
 
         session = Session.objects.create(
-            user=user,
+            user=user, # type: ignore[misc]
             ip_address=ip_address if robust_settings.TRACK_IPS else None,
             user_agent=user_agent if robust_settings.TRACK_USER_AGENTS else "",
             **device_info,
@@ -230,7 +230,7 @@ class SessionManager:
         Revoke all active sessions using batch operations to avoid N+1 queries.
         Returns count revoked.
         """
-        qs = Session.objects.filter(user=user, state=Session.State.ACTIVE)
+        qs = Session.objects.filter(user=user, state=Session.State.ACTIVE) # type: ignore[misc]
         if except_session:
             qs = qs.exclude(pk=except_session.pk)
 
@@ -370,7 +370,7 @@ class SessionManager:
         new_pair = None
         if robust_settings.REFRESH_TOKEN_ON_PASSWORD_RESET:
             # Create session directly since all old sessions were revoked
-            new_session = Session.objects.create(user=user)
+            new_session = Session.objects.create(user=user) # type: ignore[misc]
             new_pair = cls._reissue_tokens(new_session)
 
         signals.password_reset.send(
@@ -409,7 +409,7 @@ class SessionManager:
         # Lock all active sessions for this user to prevent concurrent modifications
         active = list(
             Session.objects.select_for_update().filter(
-                user=user, state=Session.State.ACTIVE
+                user=user, state=Session.State.ACTIVE # type: ignore[misc]
             ).order_by("created_at")
         )
 

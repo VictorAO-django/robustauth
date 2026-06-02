@@ -24,7 +24,7 @@ class RobustAuthMiddleware:
         self.get_response = get_response
 
     def __call__(self, request: HttpRequest):
-        request.robust_session = None
+        request.robust_session = None # type: ignore[attr-defined]
         self._attach_session(request)
         response = self.get_response(request)
         return response
@@ -40,7 +40,7 @@ class RobustAuthMiddleware:
         if at is None:
             return
 
-        request.robust_session = at.session
+        request.robust_session = at.session # type: ignore[attr-defined]
 
     @staticmethod
     def _extract_token(request: HttpRequest) -> str | None:
