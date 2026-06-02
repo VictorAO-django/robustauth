@@ -1,0 +1,75 @@
+[build-system]
+requires = ["setuptools>=68", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "robustauth"
+version = "0.1.0"
+description = "Modern session-based opaque token authentication for Django REST Framework"
+readme = "README.md"
+license = { text = "MIT" }
+authors = [{ name = "Olusola Ayomide Victor", email = "ayomideolusola5002@gmail.com" }]
+keywords = ["django", "drf", "authentication", "token", "session", "security"]
+classifiers = [
+    "Development Status :: 3 - Alpha",
+    "Environment :: Web Environment",
+    "Framework :: Django",
+    "Framework :: Django :: 4.2",
+    "Framework :: Django :: 5.0",
+    "Intended Audience :: Developers",
+    "License :: OSI Approved :: MIT License",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP",
+    "Topic :: Security",
+]
+requires-python = ">=3.10"
+dependencies = [
+    "Django>=4.2",
+    "djangorestframework>=3.14",
+    "drf-spectacular>=0.27",
+]
+
+[project.optional-dependencies]
+device = ["ua-parser>=0.18", "user-agents>=2.2"]
+dev = [
+    "pytest>=8",
+    "pytest-django>=4.8",
+    "pytest-cov>=5",
+    "black",
+    "ruff",
+    "mypy",
+    "django-stubs",
+    "djangorestframework-stubs",
+    "drf-spectacular>=0.27",
+]
+
+[project.urls]
+Homepage = "https://robustauth.readthedocs.io"
+Documentation = "https://robustauth.readthedocs.io"
+Repository = "https://github.com/VictorAO-django/robustauth"
+"Bug Tracker" = "https://github.com/VictorAO-django/robustauth/issues"
+Changelog = "https://github.com/VictorAO-django/robustauth/blob/main/CHANGELOG.md"
+
+[tool.setuptools.packages.find]
+include = ["robustauth*"]
+
+[tool.pytest.ini_options]
+DJANGO_SETTINGS_MODULE = "tests.settings"
+python_files = ["test_*.py"]
+python_classes = ["Test*"]
+python_functions = ["test_*"]
+
+[tool.ruff]
+line-length = 100
+target-version = "py310"
+select = ["E", "F", "I", "UP", "B", "SIM"]
+
+[tool.mypy]
+plugins = ["mypy_django_plugin.main", "mypy_drf_plugin.main"]
+
+[tool.django-stubs]
+django_settings_module = "tests.settings"
