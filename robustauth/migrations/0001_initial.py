@@ -61,7 +61,7 @@ class Migration(migrations.Migration):
             options={"ordering": ["-created_at"]},
         ),
         migrations.AddIndex(
-            model="session",
+            model_name="Session",
             index=models.Index(
                 fields=["user", "state"],
                 name="robustauth_session_user_state_idx",
@@ -177,14 +177,14 @@ class Migration(migrations.Migration):
             options={"ordering": ["-timestamp"]},
         ),
         migrations.AddIndex(
-            model="loginhistory",
+            model_name="LoginHistory",
             index=models.Index(
                 fields=["user", "event"],
                 name="robustauth_history_user_event_idx",
             ),
         ),
         migrations.AddIndex(
-            model="loginhistory",
+            model_name="LoginHistory",
             index=models.Index(
                 fields=["user", "timestamp"],
                 name="robustauth_history_user_ts_idx",

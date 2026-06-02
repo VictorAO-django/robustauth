@@ -521,7 +521,7 @@ class SessionManager:
             return default_device_info
         
         try:
-            from user_agents import parse as ua_parse  # optional dependency
+            from user_agents import parse as ua_parse  # type: ignore[import-not-found]
 
             ua = ua_parse(user_agent)
             return {
