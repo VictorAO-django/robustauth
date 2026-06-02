@@ -5,8 +5,9 @@
 RobustAuth replaces JWT complexity with secure, database-backed opaque tokens — giving you instant revocation, full session intelligence, and production-grade security controls out of the box.
 
 [![PyPI version](https://badge.fury.io/py/robustauth.svg)](https://pypi.org/project/robustauth/)
-[![Django](https://img.shields.io/badge/Django-4.2%20%7C%205.0-green)](https://www.djangoproject.com/)
+[![Django](https://img.shields.io/badge/Django-5.2%20%7C%206.0-green)](https://www.djangoproject.com/)
 [![DRF](https://img.shields.io/badge/DRF-3.14%2B-blue)](https://www.django-rest-framework.org/)
+[![Docs](https://readthedocs.org/projects/robustauth/badge/?version=latest)](https://robustauth.readthedocs.io)
 [![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](LICENSE)
 
 ---
@@ -59,7 +60,7 @@ Add URL patterns:
 from django.urls import path, include
 
 urlpatterns = [
-    path("auth/", include("robust_auth.urls")),
+    path("auth/", include("robustauth.urls")),
     ...
 ]
 ```
@@ -98,7 +99,7 @@ REST_FRAMEWORK = {
 Or per-view:
 
 ```python
-from robust_auth.authentication import RobustTokenAuthentication
+from robustauth.authentication import RobustTokenAuthentication
 
 class MyView(APIView):
     authentication_classes = [RobustTokenAuthentication]
@@ -109,7 +110,7 @@ class MyView(APIView):
 
 ## API Endpoints
 
-All endpoints are prefixed with wherever you mounted `robust_auth.urls`.
+All endpoints are prefixed with wherever you mounted `robustauth.urls`.
 
 ### `POST /auth/login/`
 
@@ -255,7 +256,7 @@ ROBUST_AUTH = {
 Hook into authentication events in your own apps:
 
 ```python
-from robust_auth import signals
+from robustauth import signals
 from django.dispatch import receiver
 
 @receiver(signals.token_reuse_detected)
@@ -293,7 +294,7 @@ Available signals:
 Automatically revoke all other sessions on password change:
 
 ```python
-from robust_auth.session_manager import SessionManager
+from robustauth.session_manager import SessionManager
 
 def change_password_view(request):
     # ... your password change logic ...
@@ -314,7 +315,7 @@ Attach `request.robust_session` to all requests:
 ```python
 MIDDLEWARE = [
     ...
-    "robust_auth.middleware.RobustAuthMiddleware",
+    "robustauth.middleware.RobustAuthMiddleware",
 ]
 ```
 
