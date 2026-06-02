@@ -13,12 +13,9 @@ Usage::
         "robustauth.middleware.RobustAuthMiddleware",
     ]
 """
-import json
 
-from django.http import HttpRequest, JsonResponse
-from django.utils import timezone
+from django.http import HttpRequest
 
-from .conf import robust_settings
 from .models import AccessToken
 
 

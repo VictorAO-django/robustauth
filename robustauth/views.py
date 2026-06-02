@@ -2,24 +2,22 @@
 DRF API views for RobustAuth.
 Documented for drf-spectacular (OpenAPI 3).
 """
+from django.utils.module_loading import import_string
+from drf_spectacular.types import OpenApiTypes
+from drf_spectacular.utils import (
+    OpenApiExample,
+    OpenApiParameter,
+    OpenApiResponse,
+    extend_schema,
+    extend_schema_view,
+    inline_serializer,
+)
+from rest_framework import serializers as drf_serializers
 from rest_framework import status
+from rest_framework.generics import ListAPIView
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.views import APIView
-from rest_framework.generics import ListAPIView
-
-from drf_spectacular.utils import (
-    extend_schema,
-    extend_schema_view,
-    OpenApiParameter,
-    OpenApiExample,
-    OpenApiResponse,
-    inline_serializer,
-)
-from drf_spectacular.types import OpenApiTypes
-from rest_framework import serializers as drf_serializers
-
-from django.utils.module_loading import import_string
 
 from .authentication import RobustTokenAuthentication
 from .conf import robust_settings
@@ -27,7 +25,6 @@ from .models import LoginHistory, Session
 from .serializers import (
     LoginHistorySerializer,
     LogoutAllSerializer,
-    LogoutSerializer,
     RefreshTokenSerializer,
     SessionSerializer,
 )
@@ -46,9 +43,15 @@ def _get_login_serializer_class():
 _TokenPairResponse = inline_serializer(
     name="TokenPairResponse",
     fields={
-        "access_token": drf_serializers.CharField(help_text="Short-lived opaque access token. Send as: Authorization: Bearer <token>"),
-        "refresh_token": drf_serializers.CharField(help_text="Long-lived token used to obtain new access tokens."),
-        "session_id": drf_serializers.UUIDField(help_text="UUID of the created session."),
+        "access_token": drf_serializers.CharField(
+            help_text="Short-lived opaque access token (15 min TTL)."
+        ),
+        "refresh_token": drf_serializers.CharField(
+            help_text="Long-lived token for obtaining new access tokens (7 day TTL)."
+        ),
+        "session_id": drf_serializers.UUIDField(
+            help_text="UUID of the created session."
+        ),
         "token_type": drf_serializers.CharField(help_text="Always 'Bearer'."),
     },
 )
@@ -57,7 +60,9 @@ _RefreshResponse = inline_serializer(
     name="RefreshResponse",
     fields={
         "access_token": drf_serializers.CharField(help_text="New access token."),
-        "refresh_token": drf_serializers.CharField(help_text="New refresh token. The old one is now invalid."),
+        "refresh_token": drf_serializers.CharField(
+            help_text="New refresh token (old token invalidated)."
+        ),
         "token_type": drf_serializers.CharField(help_text="Always 'Bearer'."),
     },
 )
@@ -93,10 +98,10 @@ class LoginView(APIView):
         summary="Login",
         description=(
             "Authenticate with username and password. "
-            "Returns a short-lived **access token** and a long-lived **refresh token**.\n\n"
-            "Use the access token in the `Authorization: Bearer <token>` header for all protected endpoints.\n\n"
-            "When the access token expires, use `/auth/token/refresh/` to get a new pair — "
-            "the refresh token is rotated on every use."
+            "Returns opaque token pair.\n\n"
+            "Use the access token in `Authorization: Bearer <token>` for all requests.\n\n"
+            "When access token expires, use `/auth/token/refresh/` — refresh token "
+            "rotates on every use."
         ),
         request=_get_login_serializer_class(),
         responses={
@@ -125,7 +130,12 @@ class LoginView(APIView):
                     ),
                     OpenApiExample(
                         "Session limit reached",
-                        value={"non_field_errors": ["Maximum session limit (5) reached. Please log out from another device."]},
+                        value={
+                            "non_field_errors": [
+                                "Maximum session limit (5) reached. "
+                                "Please log out from another device."
+                            ]
+                        },
                     ),
                 ],
             ),

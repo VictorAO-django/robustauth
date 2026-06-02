@@ -1,12 +1,14 @@
 """
 Built-in signal handlers wired up at app startup.
 """
-from django.contrib.auth.signals import user_login_failed
-from django.dispatch import receiver
-from django.core.cache import cache
+import contextlib
 
-from .conf import robust_settings
+from django.contrib.auth.signals import user_login_failed
+from django.core.cache import cache
+from django.dispatch import receiver
+
 from . import signals
+from .conf import robust_settings
 
 
 @receiver(user_login_failed)
@@ -23,19 +25,19 @@ def track_failed_login(sender, credentials, request, **kwargs):
 
     # Try to find the user for audit trail
     from django.contrib.auth import get_user_model
+
     from .models import LoginHistory
-    
+
     User = get_user_model()
+
     user_obj = None
     try:
         # Try to find by username first
         user_obj = User.objects.get(**{User.USERNAME_FIELD: username})
     except (User.DoesNotExist, ValueError):
         # If not found or invalid, try to find by email as fallback
-        try:
+        with contextlib.suppress(User.DoesNotExist, ValueError):
             user_obj = User.objects.get(email=username)
-        except (User.DoesNotExist, ValueError):
-            pass  # User not found, log without user reference
 
     # Log to DB with user attribution if found
     LoginHistory.objects.create(

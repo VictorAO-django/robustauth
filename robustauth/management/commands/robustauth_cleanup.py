@@ -9,10 +9,10 @@ Run periodically via cron / Celery beat::
     python manage.py robustauth_cleanup
     python manage.py robustauth_cleanup --dry-run
 """
-from django.core.management.base import BaseCommand
-from django.utils import timezone
-from django.db import transaction
 from django.contrib.auth import get_user_model
+from django.core.management.base import BaseCommand
+from django.db import transaction
+from django.utils import timezone
 
 from robustauth.conf import robust_settings
 from robustauth.models import AccessToken, LoginHistory, RefreshToken, Session

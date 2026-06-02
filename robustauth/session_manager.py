@@ -11,9 +11,9 @@ from typing import TYPE_CHECKING
 from django.db import transaction
 from django.utils import timezone
 
+from . import signals
 from .conf import robust_settings
 from .models import AccessToken, LoginHistory, RefreshToken, Session
-from . import signals
 
 if TYPE_CHECKING:
     from django.contrib.auth.models import AbstractUser
@@ -39,7 +39,7 @@ class SessionManager:
     @transaction.atomic
     def create_session(
         cls,
-        user: "AbstractUser",
+        user: AbstractUser,
         *,
         ip_address: str | None = None,
         user_agent: str = "",
@@ -122,7 +122,7 @@ class SessionManager:
     @transaction.atomic
     def _refresh_session_atomic(
         cls,
-        rt: "RefreshToken",
+        rt: RefreshToken,
         ip_address: str | None = None,
         user_agent: str = "",
     ) -> AuthTokenPair:
@@ -203,7 +203,7 @@ class SessionManager:
     @classmethod
     def logout_all_sessions(
         cls,
-        user: "AbstractUser",
+        user: AbstractUser,
         *,
         except_session: Session | None = None,
         ip_address: str | None = None,
@@ -220,7 +220,7 @@ class SessionManager:
     @classmethod
     def _logout_all_sessions_batch(
         cls,
-        user: "AbstractUser",
+        user: AbstractUser,
         *,
         except_session: Session | None = None,
         ip_address: str | None = None,
@@ -280,10 +280,10 @@ class SessionManager:
     @classmethod
     def on_password_change(
         cls,
-        user: "AbstractUser",
+        user: AbstractUser,
         *,
         current_session: Session | None = None,
-    ) -> "AuthTokenPair | None":
+    ) -> AuthTokenPair | None:
         """
         Call this after a user successfully changes their password.
 
@@ -329,10 +329,10 @@ class SessionManager:
     @classmethod
     def on_password_reset(
         cls,
-        user: "AbstractUser",
+        user: AbstractUser,
         *,
         current_session: Session | None = None,
-    ) -> "AuthTokenPair | None":
+    ) -> AuthTokenPair | None:
         """
         Call this after a password reset flow completes (e.g. reset-via-email link).
 
@@ -381,7 +381,7 @@ class SessionManager:
         return new_pair
 
     @classmethod
-    def _reissue_tokens(cls, session: Session) -> "AuthTokenPair":
+    def _reissue_tokens(cls, session: Session) -> AuthTokenPair:
         """Replace access + refresh tokens on an existing session and return the new pair."""
         AccessToken.objects.filter(session=session).delete()
         RefreshToken.objects.filter(session=session, is_used=False).update(is_revoked=True)
@@ -400,7 +400,7 @@ class SessionManager:
     # ------------------------------------------------------------------
 
     @classmethod
-    def _enforce_session_policy(cls, user: "AbstractUser") -> None:
+    def _enforce_session_policy(cls, user: AbstractUser) -> None:
         """
         Enforce the configured session policy with proper atomicity.
         Uses select_for_update() to prevent race conditions.

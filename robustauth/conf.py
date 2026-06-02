@@ -4,7 +4,6 @@ All settings are read from Django settings.ROBUST_AUTH dict.
 """
 from django.conf import settings
 
-
 DEFAULTS = {
     # Token lifetimes (seconds)
     "ACCESS_TOKEN_TTL": 900,           # 15 minutes
@@ -21,10 +20,10 @@ DEFAULTS = {
     "HASH_TOKENS": True,               # store sha256(token) in DB
 
     # Password change behaviour
-    "REVOKE_ON_PASSWORD_CHANGE": True,        # revoke other sessions on password change
-    "REFRESH_TOKEN_ON_PASSWORD_CHANGE": True, # issue fresh token pair to current session after password change
-    "REVOKE_ON_PASSWORD_RESET": True,         # revoke ALL sessions (including current) on password reset
-    "REFRESH_TOKEN_ON_PASSWORD_RESET": False, # issue fresh token pair after password reset (only if current session kept)
+    "REVOKE_ON_PASSWORD_CHANGE": True,  # revoke other sessions on password change
+    "REFRESH_TOKEN_ON_PASSWORD_CHANGE": True,  # issue fresh token pair after change
+    "REVOKE_ON_PASSWORD_RESET": True,  # revoke ALL sessions (including current)
+    "REFRESH_TOKEN_ON_PASSWORD_RESET": False,  # issue fresh token pair after reset
 
     # Tracking
     "TRACK_IPS": True,

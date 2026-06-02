@@ -127,12 +127,13 @@ class EmailLoginSerializer(BaseLoginSerializer):
     )
 
     def validate(self, attrs):
-        request = self.context.get("request")
         email = attrs["email"].lower().strip()
         try:
             user = User.objects.get(email__iexact=email)
-        except User.DoesNotExist:
-            raise serializers.ValidationError("Invalid credentials.", code="authorization")
+        except User.DoesNotExist as err:
+            raise serializers.ValidationError(
+                "Invalid credentials.", code="authorization"
+            ) from err
         if not user.check_password(attrs["password"]):
             raise serializers.ValidationError("Invalid credentials.", code="authorization")
         if not user.is_active:
