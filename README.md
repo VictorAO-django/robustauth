@@ -1,5 +1,9 @@
 # RobustAuth
 
+<div align="center">
+  <img src="https://raw.githubusercontent.com/VictorAO-django/robustauth/main/assets/logo-256.png" alt="RobustAuth Logo" width="256" />
+</div>
+
 **Modern session-based opaque token authentication for Django REST Framework.**
 
 RobustAuth replaces JWT complexity with secure, database-backed opaque tokens — giving you instant revocation, full session intelligence, and production-grade security controls out of the box.

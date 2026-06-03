@@ -49,7 +49,7 @@ Homepage = "https://github.com/VictorAO-django/robustauth"
 Documentation = "https://robustauth.readthedocs.io"
 Repository = "https://github.com/VictorAO-django/robustauth"
 "Bug Tracker" = "https://github.com/VictorAO-django/robustauth/issues"
-Changelog = "https://github.com/VictorAO-django/robustauth/blob/main/CHANGELOG.md"
+Changelog = "https://github.com/VictorAO-django/robustauth/blob/main/docs/source/changelog.md"
 
 [tool.setuptools.packages.find]
 include = ["robustauth*"]
