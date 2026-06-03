@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "robustauth"
-version = "0.1.0"
+version = "0.1.1"
 description = "Modern session-based opaque token authentication for Django REST Framework"
 readme = "README.md"
 license = { text = "MIT" }

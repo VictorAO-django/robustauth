@@ -49,7 +49,7 @@ DEFAULTS = {
 
     # Login serializer — swap to change credential fields (username/email/phone/custom)
     # Must be a dotted Python path to a subclass of BaseLoginSerializer
-    "LOGIN_SERIALIZER": "robust_auth.serializers.UsernameLoginSerializer",
+    "LOGIN_SERIALIZER": "robustauth.serializers.UsernameLoginSerializer",
 }
 
 

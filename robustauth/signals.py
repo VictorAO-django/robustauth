@@ -5,7 +5,7 @@ Connect to these in your own apps for hooks, alerting, or custom logic.
 
 Example::
 
-    from robust_auth import signals
+    from robustauth import signals
 
     @receiver(signals.token_reuse_detected)
     def alert_security_team(sender, user, session, ip_address, **kwargs):

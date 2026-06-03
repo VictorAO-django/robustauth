@@ -9,20 +9,16 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
-### Added
-- `on_password_reset()` in `SessionManager` — revokes all sessions on password reset
-- `REVOKE_ON_PASSWORD_CHANGE` — revoke other sessions on password change (was already present, now documented properly)
-- `REFRESH_TOKEN_ON_PASSWORD_CHANGE` — issue fresh token pair to current session after password change so user stays logged in
-- `REVOKE_ON_PASSWORD_RESET` — revoke all sessions including current on password reset
-- `REFRESH_TOKEN_ON_PASSWORD_RESET` — optionally issue new token pair immediately after reset
-- `PASSWORD_RESET` event type in `LoginHistory`
-- `password_changed` signal — fired after password change completes
-- `password_reset` signal — fired after password reset completes
-- Migration `0002` for new `password_reset` event type
+---
+
+## [0.1.1] - 2026-06-03
+
+### Fixed
+- Corrected default `LOGIN_SERIALIZER` path from `robust_auth.serializers.UsernameLoginSerializer` to `robustauth.serializers.UsernameLoginSerializer`
 
 ---
 
-## [0.1.0] - 2025-06-01
+## [0.1.0] - 2026-06-03
 
 ### Added
 - Opaque token authentication with SHA-256 hashed storage
@@ -48,5 +44,6 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 - Full test suite (31 tests)
 - PyPI packaging via `pyproject.toml`
 
-[Unreleased]: https://github.com/yourname/robustauth/compare/v0.1.0...HEAD
-[0.1.0]: https://github.com/yourname/robustauth/releases/tag/v0.1.0
+[Unreleased]: https://github.com/VictorAO-django/robustauth/compare/v0.1.1...HEAD
+[0.1.1]: https://github.com/VictorAO-django/robustauth/compare/v0.1.0...v0.1.1
+[0.1.0]: https://github.com/VictorAO-django/robustauth/releases/tag/v0.1.0
